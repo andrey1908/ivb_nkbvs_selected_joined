@@ -45,7 +45,7 @@ def get_new_images(images, used_images_id, start_id=0):
     return new_images, old_image_id_to_new
 
 
-def remove_classes(coco_file, out_file):
+def correct_annotations(coco_file, out_file):
     with open(coco_file, 'r') as f:
         json_dict = json.load(f)
     images = json_dict['images']
@@ -65,4 +65,4 @@ def remove_classes(coco_file, out_file):
 if __name__ == '__main__':
     parser = build_parser()
     args = parser.parse_args()
-    remove_classes(**vars(args))
+    correct_annotations(**vars(args))

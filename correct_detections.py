@@ -9,11 +9,11 @@ def build_parser():
     return parser
 
 
-def remove_classes(coco_file, out_file):
+def correct_detections(coco_file, out_file):
     with open(coco_file, 'r') as f:
         detections = json.load(f)
 
-    old_category_id_to_new = {1: 1, 3: 2}
+    old_category_id_to_new = {1: 1, 3: 2, 4: 2, 6: 2}
     new_detections = list()
     for detection in detections:
         if detection['category_id'] not in old_category_id_to_new.keys():
@@ -28,4 +28,4 @@ def remove_classes(coco_file, out_file):
 if __name__ == '__main__':
     parser = build_parser()
     args = parser.parse_args()
-    remove_classes(**vars(args))
+    correct_detections(**vars(args))
