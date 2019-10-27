@@ -9,10 +9,14 @@ def build_parser():
     return parser
 
 
-def get_new_categories():
+def get_new_categories(old_categories):
     new_categories = [{"supercategory": "none", "id": 1, "name": "Person"},
                       {"supercategory": "none", "id": 2, "name": "Car"}]
-    old_category_id_to_new = {14: 2, 24: 1}
+    old_category_name_to_new_id = {'person': 1, 'car': 2}
+    old_category_id_to_new = dict()
+    for old_category in old_categories:
+        if old_category['name'] in old_category_name_to_new_id.keys():
+            old_category_id_to_new[old_category['id']] = old_category_name_to_new_id[old_category['name']]
     return new_categories, old_category_id_to_new
 
 
@@ -38,6 +42,7 @@ def get_new_images(images, used_images_id, start_id=0):
     for image in images:
         if image['id'] not in used_images_id:
             continue
+            pass
         old_image_id_to_new[image['id']] = idx
         image['id'] = idx
         new_images.append(image)
@@ -50,8 +55,9 @@ def correct_annotations(coco_file, out_file):
         json_dict = json.load(f)
     images = json_dict['images']
     annotations = json_dict['annotations']
+    categories = json_dict['categories']
 
-    categories, old_category_id_to_new = get_new_categories()
+    categories, old_category_id_to_new = get_new_categories(categories)
     annotations, used_images_id = get_new_annotations(annotations, old_category_id_to_new)
     images, old_image_id_to_new = get_new_images(images, used_images_id)
     for annotation in annotations:
